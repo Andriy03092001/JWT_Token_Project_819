@@ -1,5 +1,9 @@
+using BaseJWTApplication819.Api_Angular.Helper;
 using BaseJWTApplication819.DataAccess;
 using BaseJWTApplication819.DataAccess.Entity;
+using BaseJWTApplication819.Domain.Implementations;
+using BaseJWTApplication819.Domain.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,7 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Data.Common;
+using System.Text;
 
 namespace BaseJWTApplication819.Api_Angular
 {
@@ -36,6 +43,9 @@ namespace BaseJWTApplication819.Api_Angular
                 .AddEntityFrameworkStores<EFContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddTransient<IJWTTokenService, JWTTokenService>();
+
+
             services.Configure<IdentityOptions>(opt =>
             {
                 opt.Password.RequireDigit = true;
@@ -44,7 +54,28 @@ namespace BaseJWTApplication819.Api_Angular
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
             });
-            
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretPhrase")));
+                
+            services.AddAuthentication(opt => {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = signingKey,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    // set ClockSkew is zero
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -76,6 +107,9 @@ namespace BaseJWTApplication819.Api_Angular
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -95,6 +129,10 @@ namespace BaseJWTApplication819.Api_Angular
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+
+           // SeederDatabase.SeedData(app.ApplicationServices, env, Configuration);
+
         }
     }
 }
