@@ -129,10 +129,13 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
 
             if (!result.Succeeded)
             {
-                return new ResultDTO
+                return new ResultErrorDTO
                 {
                     Status = 401,
-                    Message = "Incorrect login or password!"
+                    Message = "Error",
+                    Errors = new List<string>() {
+                        "Incorrect login or password!"
+                    }
                 };
             }
             else
