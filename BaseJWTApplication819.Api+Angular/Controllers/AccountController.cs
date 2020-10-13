@@ -64,7 +64,7 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
                 var userProfile = new UserAdditionalInfo()
                 {
                     Address = model.Address,
-                    Image = model.Image,
+                    Image = "default.jpg",
                     FullName = model.FullName,
                     Id = user.Id
                 };
@@ -108,6 +108,46 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
 
         }
 
+
+
+        [HttpPost("login")]
+        public async Task<ResultDTO> Login([FromBody]UserLoginDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ResultErrorDTO
+                {
+                    Status = 403,
+                    Message = "Invalid data for login",
+                    Errors = CustomValidator.GetErrorsByModel(ModelState)
+
+                };
+            }
+
+            //Переірка на успіх з логіном та паролем
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+            if (!result.Succeeded)
+            {
+                return new ResultDTO
+                {
+                    Status = 401,
+                    Message = "Incorrect login or password!"
+                };
+            }
+            else
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                await _signInManager.SignInAsync(user,false);
+
+                return new ResultLoginDTO
+                {
+                    Status = 200,
+                    Message = "OK",
+                    Token = _jWTTokenService.CreateToken(user)
+                };
+            }
+        }
 
 
 

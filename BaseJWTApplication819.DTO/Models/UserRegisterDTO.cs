@@ -21,9 +21,6 @@ namespace BaseJWTApplication819.DTO.Models
         [Required(ErrorMessage = "Phone number is required")]
         public string Phone { get; set; }
 
-        [Required(ErrorMessage = "Image is required")]
-        public string Image { get; set; }
-
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; }
     }
