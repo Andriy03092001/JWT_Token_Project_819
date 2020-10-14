@@ -43,9 +43,6 @@ namespace BaseJWTApplication819.Api_Angular
                 .AddEntityFrameworkStores<EFContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddTransient<IJWTTokenService, JWTTokenService>();
-
-
             services.Configure<IdentityOptions>(opt =>
             {
                 opt.Password.RequireDigit = true;
@@ -54,6 +51,9 @@ namespace BaseJWTApplication819.Api_Angular
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
             });
+
+            services.AddTransient<IJWTTokenService, JWTTokenService>();
+
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretPhrase")));
                 

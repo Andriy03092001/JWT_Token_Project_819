@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotifierModule, NotifierOptions } from "angular-notifier";
+import { DemoNgZorroAntdModule } from "./ng-zorro.module";
+
 
 
 import { AppComponent } from './app.component';
@@ -28,6 +30,7 @@ const configNotifier: NotifierOptions = {
   }
 };
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +49,7 @@ const configNotifier: NotifierOptions = {
     AppRoutingModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
+    DemoNgZorroAntdModule,
   ],
   providers: [NgxSpinnerService],
   bootstrap: [AppComponent]
