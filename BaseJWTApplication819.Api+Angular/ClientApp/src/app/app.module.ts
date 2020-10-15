@@ -9,8 +9,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotifierModule, NotifierOptions } from "angular-notifier";
 import { DemoNgZorroAntdModule } from "./ng-zorro.module";
 
-
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -18,6 +16,14 @@ import { AdminAreaComponent } from './Admin-area/Admin-area.component';
 import { ClientAreaComponent } from './Client-area/Client-area.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+import { AddProductComponent } from './Admin-area/add-product/add-product.component';
+import { ProductListComponent } from './Admin-area/product-list/product-list.component';
+
 
 const configNotifier: NotifierOptions = {
   position: {
@@ -30,6 +36,13 @@ const configNotifier: NotifierOptions = {
   }
 };
 
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+
+
+
 
 @NgModule({
   declarations: [
@@ -39,7 +52,9 @@ const configNotifier: NotifierOptions = {
     AdminAreaComponent,
     ClientAreaComponent,
     SignUpComponent,
-    SignInComponent
+    SignInComponent,
+    AddProductComponent,
+    ProductListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,8 +65,11 @@ const configNotifier: NotifierOptions = {
     NgxSpinnerModule,
     BrowserAnimationsModule,
     DemoNgZorroAntdModule,
+
   ],
-  providers: [NgxSpinnerService],
+  providers: [
+    NgxSpinnerService,
+    { provide: NZ_ICONS, useValue: icons }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

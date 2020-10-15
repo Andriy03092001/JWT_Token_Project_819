@@ -40,7 +40,6 @@ export class SignInComponent implements OnInit {
         data => {
           console.log(data);
           if (data.status === 200) {
-            this.authService.statusLogin.emit(true);
             window.localStorage.setItem('token', data.token);
             var decoded = jwt_decode(data.token);
             if (decoded.roles === "Admin") {
@@ -50,6 +49,8 @@ export class SignInComponent implements OnInit {
               this.router.navigate(['/client-panel']);
             }
             localStorage.setItem("role", decoded.roles);
+            this.authService.statusLogin.emit(true);
+
           }
           else {
             for (var i = 0; i < data.errors.length; i++) {

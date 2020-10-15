@@ -69,7 +69,6 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
                     Id = user.Id
                 };
 
-
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
 

@@ -9,18 +9,24 @@ import { AuthService } from '../Services/auth.service';
 export class NavMenuComponent implements OnInit {
   isExpanded = false;
   isLogin: boolean = false;
+  isAdmin: boolean = false;
+
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
     var token = localStorage.getItem('token');
     if (token != null) {
       this.isLogin = true;
+      this.isAdmin = this.authService.isAdmin();
     }
     else {
       this.isLogin = false;
+      this.isAdmin = false;
     }
+    
     this.authService.statusLogin.subscribe(
       (data) => {
+        this.isAdmin = this.authService.isAdmin();
         this.isLogin = data;
       }
     )
