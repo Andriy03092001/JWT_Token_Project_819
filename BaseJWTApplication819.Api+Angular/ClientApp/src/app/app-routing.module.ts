@@ -17,10 +17,9 @@ const routes: Routes = [
     { path: 'sign-up', canActivate: [NotLoginGuard], pathMatch: 'full', component: SignUpComponent },
     {
         path: 'admin-panel',
-        canActivate: [AdminGuard],
         component: AdminAreaComponent,
         children: [
-            { path: '', pathMatch: 'full', canActivate: [AdminGuard], component: ProductListComponent },
+            { path: '', pathMatch: 'full', component: ProductListComponent },
             { path: 'add-new-product', pathMatch: 'full', canActivate: [AdminGuard], component: AddProductComponent }
         ]
     },

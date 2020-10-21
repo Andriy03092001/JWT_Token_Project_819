@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseJWTApplication819.DataAccess;
 using BaseJWTApplication819.DTO.Models;
+using BaseJWTApplication819.DTO.Models.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +22,7 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public List<ProductDTO> getAllProducts()
         {
@@ -36,6 +39,17 @@ namespace BaseJWTApplication819.Api_Angular.Controllers
             return data;
         }
 
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("addProduct")] //locahost:123123/api/Product/addProduct, MODEL
+        public async Task<ResultDTO> addProduct([FromBody]UserLoginDTO model)
+        {
+            return new ResultDTO
+            {
+                Message = "OK",
+                Status = 200
+            };
+        }
 
     }
 }

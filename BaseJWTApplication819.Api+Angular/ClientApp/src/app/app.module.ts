@@ -23,7 +23,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { AddProductComponent } from './Admin-area/add-product/add-product.component';
 import { ProductListComponent } from './Admin-area/product-list/product-list.component';
-
+import { TokenInterceptor } from './interceptor';
 
 const configNotifier: NotifierOptions = {
   position: {
@@ -69,7 +69,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
   ],
   providers: [
     NgxSpinnerService,
-    { provide: NZ_ICONS, useValue: icons }],
+    { provide: NZ_ICONS, useValue: icons },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
